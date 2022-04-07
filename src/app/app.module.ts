@@ -9,6 +9,7 @@ import { GeneticAlgorithmsComponent } from './components/genetic-algorithms/gene
 import { ShortestPathComponent } from './components/shortest-path/shortest-path.component';
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { DocumentationComponent } from './components/documentation/documentation.component';
+import { SideBarComponent } from './components/side-bar/side-bar.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { DocumentationComponent } from './components/documentation/documentation
     GeneticAlgorithmsComponent,
     ShortestPathComponent,
     NotFoundPageComponent,
-    DocumentationComponent
+    DocumentationComponent,
+    SideBarComponent
   ],
   imports: [
     BrowserModule,

@@ -12,4 +12,7 @@ export class GeneticAlgorithmsComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  changeProblem(event: string) {
+    console.log(event);
+  }
 }

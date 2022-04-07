@@ -1,0 +1,39 @@
+/* Sidebar links */
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 16px;
+  text-decoration: none;
+}
+
+/* Active/current link */
+.sidebar a.active {
+  background-color: #1A1A40;
+  color: white;
+}
+
+/* Links on mouse-over */
+.sidebar a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+  cursor: pointer;
+}
+.wrapper {
+  display: flex;
+  justify-content: stretch;
+}
+.main{
+  padding: 15px;
+  width: 75%;
+}
+.sidebar {
+  width: 20%;
+  min-height: 25vh;
+  background-color: #86487988;
+
+}
+.sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
