@@ -10,6 +10,7 @@ import { ShortestPathComponent } from './components/shortest-path/shortest-path.
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { DocumentationComponent } from './components/documentation/documentation.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -22,10 +23,11 @@ import { SideBarComponent } from './components/side-bar/side-bar.component';
     DocumentationComponent,
     SideBarComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        FormsModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -1,10 +1,19 @@
-<app-side-bar label="Applied On" [problems]="['Traveling SalesMan','Shakespeare Monkey']" (problemChanged)="changeProblem($event)" >
+<app-side-bar label="Applied On" [problems]="['Traveling SalesMan','Shakespeare Monkey']"
+              (problemChanged)="changeProblem($event)">
   <h3 class="text-center">
-  {{problem}}
+    {{problem}}
   </h3>
   <div class="wrapper">
-
-  <button (click)="draw()">Draw</button>
-  <canvas height="300" width="300" #canvas></canvas>
+    <div>
+      <label for="numberOfCities">Number of Cities :</label>
+      <input id="numberOfCities" type="number" [(ngModel)]="numberOfCities" min="2">
+      <button class="btn btn-dark" (click)="draw()">Draw</button>
+      <label for="populationSize">Population Size :</label>
+      <input [(ngModel)]="populationSize" id="populationSize" type="number" min="10">
+      <label for="mutationRate">Mutation Rate :</label>
+      <input [(ngModel)]="mutationRate" id="mutationRate" type="number" max="1" step="0.001">
+      <button class="btn btn-primary">Lunch</button>
+    </div>
+    <canvas height="300" width="300" #canvas></canvas>
   </div>
 </app-side-bar>

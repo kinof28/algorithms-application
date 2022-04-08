@@ -1,3 +1,3 @@
 export interface Solution {
-  order:number[];
+  order:Set<number>;
 }

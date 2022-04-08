@@ -6,3 +6,6 @@ canvas{
   display: flex;
   flex-direction: column;
 }
+input{
+  width: 5rem;
+}
