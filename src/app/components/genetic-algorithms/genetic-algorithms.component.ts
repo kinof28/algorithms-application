@@ -13,8 +13,11 @@ export class GeneticAlgorithmsComponent implements OnInit , AfterViewInit{
   @ViewChild("canvas", {static: false}) canvasRef!:ElementRef;
   canvas!:HTMLCanvasElement;
   context!:CanvasRenderingContext2D;
+  numberOfCities:number=10;
   private cities: City[] = [];
   private population:Solution[]=[];
+  populationSize:number=10;
+  mutationRate:number=0.001;
 
   constructor(private service:GeneticAlgorithmsService) { }
 
@@ -38,11 +41,29 @@ export class GeneticAlgorithmsComponent implements OnInit , AfterViewInit{
   }
 
   draw() {
-    this.cities=this.service.initializeCities(10,this.canvas.width,this.canvas.height);
+    this.population=this.service.initializeGeneration(10,this.numberOfCities);
+    this.cities=this.service.initializeCities(this.numberOfCities,this.canvas.width,this.canvas.height);
     for (const city of this.cities) {
       let circle = new Path2D();
       circle.arc(city.x, city.y, 20, 0, 2 * Math.PI);
       this.context.fill(circle);
     }
+    for (let solution of this.population) {
+      // console.log(this.service.calculatePathLength(this.cities,solution));
+      this.drawSolution(solution);
+    }
+  }
+  drawSolution(solution:Solution){
+    this.context.strokeStyle = 'red';
+    this.context.lineWidth = 5;
+    this.context.beginPath();
+    let iterator:Iterator<number>=solution.order.values();
+    let city:City=this.cities[iterator.next().value];
+    this.context.moveTo(city.x,city.y);
+    for (let i = 1; i < this.cities.length; i++) {
+      let city:City=this.cities[iterator.next().value];
+      this.context.lineTo(city.x,city.y);
+    }
+    this.context.stroke();
   }
 }
