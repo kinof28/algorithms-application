@@ -4,15 +4,22 @@
     {{problem}}
   </h3>
   <div class="wrapper">
-    <div>
-      <label for="numberOfCities">Number of Cities :</label>
-      <input id="numberOfCities" type="number" [(ngModel)]="numberOfCities" min="2">
-      <button class="btn btn-dark" (click)="draw()">Draw</button>
-      <label for="populationSize">Population Size :</label>
-      <input [(ngModel)]="populationSize" id="populationSize" type="number" min="10">
-      <label for="mutationRate">Mutation Rate :</label>
-      <input [(ngModel)]="mutationRate" id="mutationRate" type="number" max="1" step="0.001">
-      <button class="btn btn-primary">Lunch</button>
+    <div class="action-area">
+      <div>
+        <label for="numberOfCities">Number of Cities :</label>
+        <input id="numberOfCities" type="number" [(ngModel)]="numberOfCities" min="2">
+      </div>
+      <button class="btn btn-dark" [disabled]="lunched" (click)="initialise()">Initialise</button>
+      <div>
+        <label for="populationSize">Population Size :</label>
+        <input [(ngModel)]="populationSize" id="populationSize" type="number" min="10">
+      </div>
+      <div>
+        <label for="mutationRate">Mutation Rate :</label>
+        <input [(ngModel)]="mutationRate" id="mutationRate" type="number" max="1" step="0.001">
+      </div>
+      <button class="btn btn-primary" [disabled]="lunched" (click)="lunch()">Lunch</button>
+      <button class="btn btn-warning" [disabled]="!lunched" (click)="stop()">Stop</button>
     </div>
     <canvas height="300" width="300" #canvas></canvas>
   </div>

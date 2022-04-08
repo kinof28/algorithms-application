@@ -24,8 +24,11 @@ export class GeneticAlgorithmsService {
   //this function initialize the first generation
   initializeGeneration(populationSize:number,numberOfCities:number):Solution[]{
     let solutions:Solution[]=[];
+    let solution:Solution;
     for (let i = 0; i < populationSize; i++) {
-      solutions.push(this.randomizeSolution(numberOfCities));
+      solution=this.randomizeSolution(numberOfCities);
+      // solution.fitness=this.
+      solutions.push(solution);
     }
     return solutions;
   }

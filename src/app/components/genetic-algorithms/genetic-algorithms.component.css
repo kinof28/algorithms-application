@@ -9,3 +9,8 @@ canvas{
 input{
   width: 5rem;
 }
+.action-area{
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
