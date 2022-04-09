@@ -9,7 +9,7 @@ import {Solution} from "../../models/solution";
   styleUrls: ['./genetic-algorithms.component.css']
 })
 export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
-  problem: string = "Traveling salesMan";
+  problem: string = "Traveling SalesMan";
   @ViewChild("canvas", {static: false}) canvasRef!: ElementRef;
   canvas!: HTMLCanvasElement;
   context!: CanvasRenderingContext2D;
@@ -19,6 +19,7 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   populationSize: number = 100;
   mutationRate: number = 0.1;
   lunched: boolean = false;
+  initialized: boolean = false;
   bestEver: Solution | null = null;
   bestLength: number = Number.MAX_VALUE;
   private index: number = 0;
@@ -38,8 +39,8 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.canvas = this.canvasRef.nativeElement;
-    this.canvas.height = document.body.clientHeight - 0.2 * document.body.clientHeight;
-    this.canvas.width = document.body.clientWidth - 0.25 * document.body.clientWidth;
+    this.canvas.height = Math.max(300, (document.body.clientHeight - 0.2 * document.body.clientHeight));
+    this.canvas.width = Math.max(300, (document.body.clientWidth - 0.25 * document.body.clientWidth));
     this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
     this.context.fillStyle = "#FFFFFF";
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -48,13 +49,8 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   }
 
   lunch() {
-    console.log("draw started");
     this.lunched = true;
-    this.generationNumber = 0;
-    this.bestEver = null;
-    this.sumOfFitness = 0;
-    this.index = 0;
-    this.bestLength = Number.MAX_VALUE;
+
     window.requestAnimationFrame(() => {
       this.draw();
     });
@@ -93,6 +89,7 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
 
   stop() {
     this.lunched = false;
+    this.initialized=false;
     this.index = 0;
   }
 
@@ -109,6 +106,12 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   }
 
   initialise() {
+    this.initialized=true;
+    this.generationNumber = 0;
+    this.bestEver = null;
+    this.sumOfFitness = 0;
+    this.index = 0;
+    this.bestLength = Number.MAX_VALUE;
     this.population = this.service.initializeGeneration(this.populationSize, this.numberOfCities);
     this.cities = this.service.initializeCities(this.numberOfCities, this.canvas.width, this.canvas.height);
     this.drawCities()

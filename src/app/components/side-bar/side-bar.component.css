@@ -1,7 +1,7 @@
 /* Sidebar links */
 .sidebar a {
   display: block;
-  color: black;
+  color: white;
   padding: 16px;
   text-decoration: none;
 }
@@ -32,8 +32,7 @@
 .sidebar {
   width: 20%;
   min-height: 25vh;
-  background-color: #86487988;
-
+  background-color: #3F3351;
 }
 
 .sidebar {

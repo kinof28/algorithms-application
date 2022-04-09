@@ -3,7 +3,7 @@
   <h3 class="text-center">
     {{problem}}
   </h3>
-  <div class="wrapper">
+  <div class="wrapper" [ngClass]="{'hidden':problem!=='Traveling SalesMan'}">
     <div class="action-area">
       <div>
         <label for="numberOfCities">Number of Cities :</label>
@@ -18,7 +18,7 @@
         <label for="mutationRate">Mutation Rate :</label>
         <input [(ngModel)]="mutationRate" id="mutationRate" type="number" max="1" step="0.001">
       </div>
-      <button class="btn btn-primary" [disabled]="lunched" (click)="lunch()">Lunch</button>
+      <button class="btn btn-primary" [disabled]="lunched||!initialized" (click)="lunch()">Lunch</button>
       <button class="btn btn-warning" [disabled]="!lunched" (click)="stop()">Stop</button>
     </div>
     <canvas height="300" width="300" #canvas></canvas>
