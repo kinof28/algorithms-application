@@ -1,16 +1,19 @@
-canvas{
+canvas {
   border: 1px solid black;
   width: 100%;
 }
-.wrapper{
+
+.wrapper {
   display: flex;
   flex-direction: column;
 }
-input{
+
+input {
   width: 5rem;
 }
-.action-area{
-  display:flex;
+
+.action-area {
+  display: flex;
   justify-content: space-between;
   align-items: center;
 }

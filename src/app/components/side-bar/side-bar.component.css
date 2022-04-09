@@ -18,20 +18,24 @@
   color: white;
   cursor: pointer;
 }
+
 .wrapper {
   display: flex;
   justify-content: stretch;
 }
-.main{
+
+.main {
   padding: 15px;
   width: 75%;
 }
+
 .sidebar {
   width: 20%;
   min-height: 25vh;
   background-color: #86487988;
 
 }
+
 .sidebar {
   position: -webkit-sticky;
   position: sticky;

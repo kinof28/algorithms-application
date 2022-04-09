@@ -19,11 +19,12 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   populationSize: number = 100;
   mutationRate: number = 0.1;
   lunched: boolean = false;
-  bestEver:Solution|null=null;
-  bestLength:number=Number.MAX_VALUE;
+  bestEver: Solution | null = null;
+  bestLength: number = Number.MAX_VALUE;
   private index: number = 0;
-  sumOfFitness:number=0;
-  generationNumber:number=0;
+  sumOfFitness: number = 0;
+  generationNumber: number = 0;
+
   constructor(private service: GeneticAlgorithmsService) {
   }
 
@@ -49,47 +50,44 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   lunch() {
     console.log("draw started");
     this.lunched = true;
-    this.generationNumber=0;
-    this.bestEver=null;
-    this.sumOfFitness=0;
-    this.index=0;
-    this.bestLength=Number.MAX_VALUE;
-
+    this.generationNumber = 0;
+    this.bestEver = null;
+    this.sumOfFitness = 0;
+    this.index = 0;
+    this.bestLength = Number.MAX_VALUE;
     window.requestAnimationFrame(() => {
       this.draw();
     });
   }
 
   draw() {
-    if(!this.lunched)return ;
+    if (!this.lunched) return;
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawCities();
-    if(this.bestEver!==null)this.drawSolution(this.bestEver,true);
-    this.drawSolution(this.population[this.index],false);
-    let length=this.service.calculatePathLength(this.cities,this.population[this.index]);
-    this.population[this.index].fitness=1/(length+1);//we add one in cas of length =0 to avoid runtime exception
-    this.sumOfFitness+=1/(length+1);
-    // console.log(length);
-    if(this.bestLength>length){
-      this.bestEver=this.population[this.index];
-      this.bestLength=length;
+    if (this.bestEver !== null) this.drawSolution(this.bestEver, true);
+    this.drawSolution(this.population[this.index], false);
+    let length = this.service.calculatePathLength(this.cities, this.population[this.index]);
+    this.population[this.index].fitness = 1 / (length + 1);//we add one in cas of length =0 to avoid runtime exception
+    this.sumOfFitness += 1 / (length + 1);
+    if (this.bestLength > length) {
+      this.bestEver = this.population[this.index];
+      this.bestLength = length;
     }
     this.index++;
     if (this.index < this.population.length) {
       window.requestAnimationFrame(() => {
         this.draw();
       });
-    }
-    else {
-      this.service.normalizeFitness(this.population,this.sumOfFitness);
-      this.population=this.service.getNewGeneration(this.population,this.mutationRate);
-      this.sumOfFitness=0;
-      this.index=0;
+    } else {
+      this.service.normalizeFitness(this.population, this.sumOfFitness);
+      this.population = this.service.getNewGeneration(this.population, this.mutationRate);
+      this.sumOfFitness = 0;
+      this.index = 0;
       this.generationNumber++;
-      if(this.generationNumber<1000)
-      window.requestAnimationFrame(()=>{
-        this.draw();
-      })
+      if (this.generationNumber < 1000)
+        window.requestAnimationFrame(() => {
+          this.draw();
+        })
     }
   }
 
@@ -111,16 +109,15 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   }
 
   initialise() {
-    // this.context.globalCompositeOperation = 'destination-over';
     this.population = this.service.initializeGeneration(this.populationSize, this.numberOfCities);
     this.cities = this.service.initializeCities(this.numberOfCities, this.canvas.width, this.canvas.height);
     this.drawCities()
   }
 
-  drawSolution(solution: Solution,best:boolean) {
+  drawSolution(solution: Solution, best: boolean) {
     console.log(solution.order);
-    this.context.strokeStyle = best?'green':'black';
-    this.context.lineWidth = best? 5: 2;
+    this.context.strokeStyle = best ? 'green' : 'black';
+    this.context.lineWidth = best ? 5 : 2;
     this.context.beginPath();
     let iterator: Iterator<number> = solution.order.values();
     let city: City = this.cities[iterator.next().value];

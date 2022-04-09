@@ -19,7 +19,6 @@ export class GeneticAlgorithmsService {
       city.y = Math.random() * height;
       cities.push(city);
     }
-
     return cities;
   }
 
@@ -32,12 +31,12 @@ export class GeneticAlgorithmsService {
     return solutions;
   }
 
+  //make the fitness a percentage
   normalizeFitness(population: Solution[], sumOfFitness: number) {
     for (let i = 0; i < population.length; i++) {
       population[i].fitness = population[i].fitness! / sumOfFitness;
     }
   }
-
 
   // get a random solution
   // this function is so costy we need to optimise it later
@@ -73,33 +72,31 @@ export class GeneticAlgorithmsService {
     let parent2: Solution;
     let child: Solution;
     for (let i = 0; i < population.length; i++) {
-      // console.log(population[i].fitness);
       parent1 = this.pickOne(population);
       parent2 = this.pickOne(population);
       child = this.crossOver(parent1, parent2);
       newPopulation.push(this.mutate(child, mutationRate));
     }
     return newPopulation;
-    // return population;
   }
 
   // this mechanism is better than creating a large pool of redundant solutions
   // or creating a loop of randomisation (accept and reject mechanism)
   pickOne(population: Solution[]): Solution {
     let index = 0;
-    let randomNumber=Math.random();
-    while(randomNumber>0){
-      randomNumber-=population[index].fitness!;
+    let randomNumber = Math.random();
+    while (randomNumber > 0) {
+      randomNumber -= population[index].fitness!;
       index++;
     }
-    return population[index-1];
+    return population[index - 1];
   }
 
   crossOver(parent1: Solution, parent2: Solution): Solution {
-    let child:Solution={order:new Set<number>()};
-    let random=Math.floor(Math.random()*parent1.order.size);
-    let iterator1=parent1.order.values();
-    let iterator2=parent2.order.values();
+    let child: Solution = {order: new Set<number>()};
+    let random = Math.floor(Math.random() * parent1.order.size);
+    let iterator1 = parent1.order.values();
+    let iterator2 = parent2.order.values();
     for (let i = 0; i < random; i++) {
       child.order.add(iterator1.next().value);
     }
@@ -108,27 +105,28 @@ export class GeneticAlgorithmsService {
     }
     return child;
   }
+
   // mutation between two elements in a set is quite tricky but since it's a rare operation and not a quit corty one
   // we are doing it inefficiently
   mutate(solution: Solution, mutationRate: number): Solution {
-    let randomNumber=Math.random();
-    if(randomNumber<mutationRate){
-      let newSolution:Solution={order:new Set<number>()};
-      let index1=Math.floor(Math.random()*solution.order.size);
-      let index2=Math.floor(Math.random()*solution.order.size);
-      let temp1:number=0;
-      let temp2:number=0;
-      solution.order.forEach((value,index)=>{
-        if(index==index1)temp1 = value;
-        else if (index==index2)temp2=value;
+    let randomNumber = Math.random();
+    if (randomNumber < mutationRate) {
+      let newSolution: Solution = {order: new Set<number>()};
+      let index1 = Math.floor(Math.random() * solution.order.size);
+      let index2 = Math.floor(Math.random() * solution.order.size);
+      let temp1: number = 0;
+      let temp2: number = 0;
+      solution.order.forEach((value, index) => {
+        if (index == index1) temp1 = value;
+        else if (index == index2) temp2 = value;
       })
-      solution.order.forEach((value,index)=>{
-        if(index==index1)newSolution.order.add(temp2);
-        else if(index==index2)newSolution.order.add(temp1);
+      solution.order.forEach((value, index) => {
+        if (index == index1) newSolution.order.add(temp2);
+        else if (index == index2) newSolution.order.add(temp1);
         newSolution.order.add(value);
       })
       return newSolution;
-    }else return solution;
+    } else return solution;
   }
 
 }

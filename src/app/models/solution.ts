@@ -1,4 +1,4 @@
 export interface Solution {
-  order:Set<number>;
-  fitness?:number;
+  order: Set<number>;
+  fitness?: number;
 }
