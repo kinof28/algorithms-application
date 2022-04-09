@@ -22,7 +22,8 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   bestEver!:Solution;
   bestLength:number=Number.MAX_VALUE;
   private index: number = 0;
-
+  sumOfFitness:number=0;
+  generationNumber:number=0;
   constructor(private service: GeneticAlgorithmsService) {
   }
 
@@ -59,15 +60,29 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
     if(this.bestEver!==undefined)this.drawSolution(this.bestEver,true);
     this.drawSolution(this.population[this.index],false);
     let length=this.service.calculatePathLength(this.cities,this.population[this.index]);
+    this.population[this.index].fitness=1/(length+1);//we add one in cas of length =0 to avoid runtime exception
+    this.sumOfFitness+=1/(length+1);
     // console.log(length);
     if(this.bestLength>length){
       this.bestEver=this.population[this.index];
       this.bestLength=length;
     }
     this.index++;
-    if (this.lunched && this.index < this.population.length) window.requestAnimationFrame(() => {
-      this.draw();
-    });
+    if (this.lunched && this.index < this.population.length) {
+      window.requestAnimationFrame(() => {
+        this.draw();
+      });
+    }
+    else {
+      this.service.normalizeFitness(this.population,this.sumOfFitness);
+      this.population=this.service.getNewGeneration(this.population,this.mutationRate);
+      this.index=0;
+      this.generationNumber++;
+      if(this.generationNumber>1000)
+      window.requestAnimationFrame(()=>{
+        this.draw();
+      })
+    }
   }
 
   stop() {

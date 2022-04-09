@@ -1,4 +1,4 @@
-<app-side-bar label="Applied On" [problems]="['Traveling SalesMan','Shakespeare Monkey']"
+<app-side-bar label="Applied On" [problems]="['Traveling SalesMan','Shakespeare Monkey','knapsack']"
               (problemChanged)="changeProblem($event)">
   <h3 class="text-center">
     {{problem}}
@@ -22,5 +22,7 @@
       <button class="btn btn-warning" [disabled]="!lunched" (click)="stop()">Stop</button>
     </div>
     <canvas height="300" width="300" #canvas></canvas>
+    <p class="text-center">Generation number : {{generationNumber}}</p>
+    <p class="text-center">best length : {{bestLength}}</p>
   </div>
 </app-side-bar>
