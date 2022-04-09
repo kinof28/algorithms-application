@@ -6,7 +6,6 @@ canvas {
 .wrapper {
   display: flex;
   flex-direction: column;
-  /*min-height: 80%;*/
 }
 .hidden{
   display: none;
@@ -19,4 +18,5 @@ input {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }

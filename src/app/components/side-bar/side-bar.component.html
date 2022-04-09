@@ -1,6 +1,6 @@
 <div class="wrapper">
   <div class="sidebar">
-    <h5 class="text-center">{{label}}</h5>
+    <h6 class="text-center">{{label}}</h6>
     <a *ngFor="let problem of problems" (click)="problemClicked(problem)"
        [ngClass]="{'active':problem==activeProblem}">{{problem}}</a>
   </div>

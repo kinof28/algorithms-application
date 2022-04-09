@@ -2,6 +2,25 @@
 html, body {
   height: 100%;
   margin: 0;
+  font-size: 2vh;
+}
+h1{
+  font-size: 8vh;
+}
+h2{
+  font-size: 7vh;
+}
+h3{
+  font-size: 6vh;
+}
+h4{
+  font-size: 5vh;
+}
+h5{
+  font-size: 4vh;
+}
+h6{
+  font-size: 3vh;
 }
 body{
   background-color: rgba(0,0,0,70%)!important;
