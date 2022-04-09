@@ -73,12 +73,14 @@ export class GeneticAlgorithmsService {
     let parent2: Solution;
     let child: Solution;
     for (let i = 0; i < population.length; i++) {
+      // console.log(population[i].fitness);
       parent1 = this.pickOne(population);
       parent2 = this.pickOne(population);
       child = this.crossOver(parent1, parent2);
       newPopulation.push(this.mutate(child, mutationRate));
     }
     return newPopulation;
+    // return population;
   }
 
   // this mechanism is better than creating a large pool of redundant solutions
@@ -116,25 +118,15 @@ export class GeneticAlgorithmsService {
       let index2=Math.floor(Math.random()*solution.order.size);
       let temp1:number=0;
       let temp2:number=0;
-      let iterator=solution.order.values();
-      for (let i = 0;i < solution.order.size; i++) {
-        if(i===index1){
-          temp1=iterator.next().value;
-        }
-        if(i===index2){
-          temp2=iterator.next().value;
-        }
-        else iterator.next();
-      }
-      for (let i = 0;i < solution.order.size; i++) {
-        if(i===index1){
-          newSolution.order.add(temp2);
-        }
-        if(i===index2){
-          newSolution.order.add(temp1);
-        }
-        else newSolution.order.add(iterator.next().value);
-      }
+      solution.order.forEach((value,index)=>{
+        if(index==index1)temp1 = value;
+        else if (index==index2)temp2=value;
+      })
+      solution.order.forEach((value,index)=>{
+        if(index==index1)newSolution.order.add(temp2);
+        else if(index==index2)newSolution.order.add(temp1);
+        newSolution.order.add(value);
+      })
       return newSolution;
     }else return solution;
   }

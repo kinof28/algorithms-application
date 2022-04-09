@@ -16,10 +16,10 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   numberOfCities: number = 10;
   private cities: City[] = [];
   private population: Solution[] = [];
-  populationSize: number = 10;
-  mutationRate: number = 0.001;
+  populationSize: number = 100;
+  mutationRate: number = 0.1;
   lunched: boolean = false;
-  bestEver!:Solution;
+  bestEver:Solution|null=null;
   bestLength:number=Number.MAX_VALUE;
   private index: number = 0;
   sumOfFitness:number=0;
@@ -49,15 +49,22 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   lunch() {
     console.log("draw started");
     this.lunched = true;
+    this.generationNumber=0;
+    this.bestEver=null;
+    this.sumOfFitness=0;
+    this.index=0;
+    this.bestLength=Number.MAX_VALUE;
+
     window.requestAnimationFrame(() => {
       this.draw();
     });
   }
 
   draw() {
+    if(!this.lunched)return ;
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawCities();
-    if(this.bestEver!==undefined)this.drawSolution(this.bestEver,true);
+    if(this.bestEver!==null)this.drawSolution(this.bestEver,true);
     this.drawSolution(this.population[this.index],false);
     let length=this.service.calculatePathLength(this.cities,this.population[this.index]);
     this.population[this.index].fitness=1/(length+1);//we add one in cas of length =0 to avoid runtime exception
@@ -68,7 +75,7 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
       this.bestLength=length;
     }
     this.index++;
-    if (this.lunched && this.index < this.population.length) {
+    if (this.index < this.population.length) {
       window.requestAnimationFrame(() => {
         this.draw();
       });
@@ -76,9 +83,10 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
     else {
       this.service.normalizeFitness(this.population,this.sumOfFitness);
       this.population=this.service.getNewGeneration(this.population,this.mutationRate);
+      this.sumOfFitness=0;
       this.index=0;
       this.generationNumber++;
-      if(this.generationNumber>1000)
+      if(this.generationNumber<1000)
       window.requestAnimationFrame(()=>{
         this.draw();
       })
@@ -110,6 +118,7 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   }
 
   drawSolution(solution: Solution,best:boolean) {
+    console.log(solution.order);
     this.context.strokeStyle = best?'green':'black';
     this.context.lineWidth = best? 5: 2;
     this.context.beginPath();
