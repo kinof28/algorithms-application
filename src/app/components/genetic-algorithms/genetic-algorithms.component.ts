@@ -39,6 +39,7 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.canvas = this.canvasRef.nativeElement;
+    //TODO:Need to fix a bug in canvas dimensions
     this.canvas.height = (document.body.clientHeight - 0.2 * document.body.clientHeight);
     this.canvas.width = (document.body.clientWidth - 0.25 * document.body.clientWidth);
     this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
