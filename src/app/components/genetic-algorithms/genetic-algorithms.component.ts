@@ -18,7 +18,7 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   private population: Solution[] = [];
   populationSize: number = 100;
   mutationRate: number = 0.1;
-  lunched: boolean = false;
+  started: boolean = false;
   initialized: boolean = false;
   bestEver: Solution | null = null;
   bestLength: number = Number.MAX_VALUE;
@@ -49,8 +49,8 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
 
   }
 
-  lunch() {
-    this.lunched = true;
+  Start() {
+    this.started = true;
 
     window.requestAnimationFrame(() => {
       this.draw();
@@ -58,7 +58,7 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   }
 
   draw() {
-    if (!this.lunched) return;
+    if (!this.started) return;
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawCities();
     if (this.bestEver !== null) this.drawSolution(this.bestEver, true);
@@ -89,7 +89,7 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   }
 
   stop() {
-    this.lunched = false;
+    this.started = false;
     this.initialized=false;
     this.index = 0;
   }
@@ -119,7 +119,6 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   }
 
   drawSolution(solution: Solution, best: boolean) {
-    console.log(solution.order);
     this.context.strokeStyle = best ? 'green' : 'black';
     this.context.lineWidth = best ? 5 : 2;
     this.context.beginPath();
