@@ -1,4 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Point } from 'src/app/models/point';
+import { GeneticAlgorithmsService } from 'src/app/services/genetic-algorithms.service';
 
 @Component({
   selector: 'app-k-means',
@@ -13,8 +15,8 @@ export class KMeansComponent implements OnInit {
   @ViewChild('canvas', { static: false }) canvasRef!: ElementRef;
   canvas!: HTMLCanvasElement;
   context!: CanvasRenderingContext2D;
-
-  constructor() {}
+  private points: Point[] = [];
+  constructor(private geneticAlgorithmService: GeneticAlgorithmsService) {}
 
   ngOnInit(): void {}
 
@@ -22,7 +24,7 @@ export class KMeansComponent implements OnInit {
     this.canvas = this.canvasRef.nativeElement;
     //TODO:Need to fix a bug in canvas dimensions
     this.canvas.height =
-      document.body.clientHeight - 0.2 * document.body.clientHeight;
+      document.body.clientHeight - 0.4 * document.body.clientHeight;
     this.canvas.width =
       document.body.clientWidth - 0.25 * document.body.clientWidth;
     this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
@@ -30,23 +32,25 @@ export class KMeansComponent implements OnInit {
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     this.context.fillStyle = '#1A1A40';
   }
+  drawPoints() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.fillStyle = '#FFFFFF';
+    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.fillStyle = '#1A1A40';
+    for (const point of this.points) {
+      let circle = new Path2D();
+      circle.arc(point.x, point.y, 20, 0, 2 * Math.PI);
+      this.context.fill(circle);
+    }
+  }
   initialize() {
     this.initialized = true;
-    // this.generationNumber = 0;
-    // this.bestEver = null;
-    // this.sumOfFitness = 0;
-    // this.index = 0;
-    // this.bestLength = Number.MAX_VALUE;
-    // this.population = this.service.initializeGeneration(
-    //   this.populationSize,
-    //   this.numberOfCities
-    // );
-    // this.cities = this.service.initializeCities(
-    //   this.numberOfCities,
-    //   this.canvas.width,
-    //   this.canvas.height
-    // );
-    // this.drawCities();
+    this.points = this.geneticAlgorithmService.initializePoints(
+      this.numberOfEntries,
+      this.canvas.width,
+      this.canvas.height
+    );
+    this.drawPoints();
   }
   start(): void {}
   stop(): void {}
