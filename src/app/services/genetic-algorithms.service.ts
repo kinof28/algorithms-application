@@ -1,29 +1,34 @@
-import {Injectable} from '@angular/core';
-import {City} from "../models/city";
-import {Solution} from "../models/solution";
+import { Injectable } from '@angular/core';
+import { Point } from '../models/point';
+import { Solution } from '../models/solution';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GeneticAlgorithmsService {
-
-  constructor() {
-  }
+  constructor() {}
 
   //this function initialize number of cities in random coordination
-  initializeCities(numberOfCities: number, width: number, height: number): City[] {
-    let cities: City[] = [];
-    for (let i = 0; i < numberOfCities; i++) {
-      let city: City = {x: 0, y: 0};
-      city.x = Math.random() * width;
-      city.y = Math.random() * height;
-      cities.push(city);
+  initializePoints(
+    numberOfPoints: number,
+    width: number,
+    height: number
+  ): Point[] {
+    let points: Point[] = [];
+    for (let i = 0; i < numberOfPoints; i++) {
+      let point: Point = { x: 0, y: 0 };
+      point.x = Math.random() * width;
+      point.y = Math.random() * height;
+      points.push(point);
     }
-    return cities;
+    return points;
   }
 
   //this function initialize the first generation
-  initializeGeneration(populationSize: number, numberOfCities: number): Solution[] {
+  initializeGeneration(
+    populationSize: number,
+    numberOfCities: number
+  ): Solution[] {
     let solutions: Solution[] = [];
     for (let i = 0; i < populationSize; i++) {
       solutions.push(this.randomizeSolution(numberOfCities));
@@ -41,7 +46,7 @@ export class GeneticAlgorithmsService {
   // get a random solution
   // this function is so costy we need to optimise it later
   private randomizeSolution(numberOfCities: number): Solution {
-    let solution: Solution = {order: new Set<number>()};
+    let solution: Solution = { order: new Set<number>() };
     while (solution.order.size < numberOfCities) {
       solution.order.add(Math.floor(Math.random() * numberOfCities));
     }
@@ -50,18 +55,18 @@ export class GeneticAlgorithmsService {
 
   //this function calculate distance between two cities and return the distance square
   //to avoid calculation of square root since we are interested only in relativity between distances
-  calculateDistance(firstCity: City, secondCity: City): number {
+  calculateDistance(firstPoint: Point, secondPoint: Point): number {
     let x, y: number;
-    x = Math.abs(firstCity.x - secondCity.x);
-    y = Math.abs(firstCity.y - secondCity.y);
-    return (x * x) + (y * y);
+    x = Math.abs(firstPoint.x - secondPoint.x);
+    y = Math.abs(firstPoint.y - secondPoint.y);
+    return x * x + y * y;
   }
 
-  calculatePathLength(cities: City[], solution: Solution): number {
+  calculatePathLength(points: Point[], solution: Solution): number {
     let length: number = 0;
     let order: number[] = [...solution.order];
     for (let i = 0; i < order.length - 1; i++) {
-      length += this.calculateDistance(cities[order[i]], cities[order[i + 1]]);
+      length += this.calculateDistance(points[order[i]], points[order[i + 1]]);
     }
     return length;
   }
@@ -81,7 +86,7 @@ export class GeneticAlgorithmsService {
   }
 
   // this mechanism is better than creating a large pool of redundant solutions
-  // or creating a loop of randomisation (accept and reject mechanism)
+  // or creating a loop of randomization (accept and reject mechanism)
   pickOne(population: Solution[]): Solution {
     let index = 0;
     let randomNumber = Math.random();
@@ -93,7 +98,7 @@ export class GeneticAlgorithmsService {
   }
 
   crossOver(parent1: Solution, parent2: Solution): Solution {
-    let child: Solution = {order: new Set<number>()};
+    let child: Solution = { order: new Set<number>() };
     let random = Math.floor(Math.random() * parent1.order.size);
     let iterator1 = parent1.order.values();
     let iterator2 = parent2.order.values();
@@ -111,7 +116,7 @@ export class GeneticAlgorithmsService {
   mutate(solution: Solution, mutationRate: number): Solution {
     let randomNumber = Math.random();
     if (randomNumber < mutationRate) {
-      let newSolution: Solution = {order: new Set<number>()};
+      let newSolution: Solution = { order: new Set<number>() };
       let index1 = Math.floor(Math.random() * solution.order.size);
       let index2 = Math.floor(Math.random() * solution.order.size);
       let temp1: number = 0;
@@ -119,15 +124,13 @@ export class GeneticAlgorithmsService {
       solution.order.forEach((value, index) => {
         if (index == index1) temp1 = value;
         else if (index == index2) temp2 = value;
-      })
+      });
       solution.order.forEach((value, index) => {
         if (index == index1) newSolution.order.add(temp2);
         else if (index == index2) newSolution.order.add(temp1);
         newSolution.order.add(value);
-      })
+      });
       return newSolution;
     } else return solution;
   }
-
 }
-

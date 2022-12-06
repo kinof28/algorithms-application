@@ -1,20 +1,26 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {City} from "../../models/city";
-import {GeneticAlgorithmsService} from "../../services/genetic-algorithms.service";
-import {Solution} from "../../models/solution";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { Point } from '../../models/point';
+import { GeneticAlgorithmsService } from '../../services/genetic-algorithms.service';
+import { Solution } from '../../models/solution';
 
 @Component({
   selector: 'app-genetic-algorithms',
   templateUrl: './genetic-algorithms.component.html',
-  styleUrls: ['./genetic-algorithms.component.css']
+  styleUrls: ['./genetic-algorithms.component.css'],
 })
 export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
-  problem: string = "Traveling SalesMan";
-  @ViewChild("canvas", {static: false}) canvasRef!: ElementRef;
+  problem: string = 'Traveling SalesMan';
+  @ViewChild('canvas', { static: false }) canvasRef!: ElementRef;
   canvas!: HTMLCanvasElement;
   context!: CanvasRenderingContext2D;
   numberOfCities: number = 10;
-  private cities: City[] = [];
+  private cities: Point[] = [];
   private population: Solution[] = [];
   populationSize: number = 100;
   mutationRate: number = 0.1;
@@ -26,12 +32,9 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   sumOfFitness: number = 0;
   generationNumber: number = 0;
 
-  constructor(private service: GeneticAlgorithmsService) {
-  }
+  constructor(private service: GeneticAlgorithmsService) {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   changeProblem(problem: string) {
     this.problem = problem;
@@ -40,13 +43,14 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.canvas = this.canvasRef.nativeElement;
     //TODO:Need to fix a bug in canvas dimensions
-    this.canvas.height = (document.body.clientHeight - 0.2 * document.body.clientHeight);
-    this.canvas.width = (document.body.clientWidth - 0.25 * document.body.clientWidth);
+    this.canvas.height =
+      document.body.clientHeight - 0.2 * document.body.clientHeight;
+    this.canvas.width =
+      document.body.clientWidth - 0.25 * document.body.clientWidth;
     this.context = <CanvasRenderingContext2D>this.canvas.getContext('2d');
-    this.context.fillStyle = "#FFFFFF";
+    this.context.fillStyle = '#FFFFFF';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.fillStyle = "#1A1A40";
-
+    this.context.fillStyle = '#1A1A40';
   }
 
   Start() {
@@ -63,8 +67,11 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
     this.drawCities();
     if (this.bestEver !== null) this.drawSolution(this.bestEver, true);
     this.drawSolution(this.population[this.index], false);
-    let length = this.service.calculatePathLength(this.cities, this.population[this.index]);
-    this.population[this.index].fitness = 1 / (length + 1);//we add one in cas of length =0 to avoid runtime exception
+    let length = this.service.calculatePathLength(
+      this.cities,
+      this.population[this.index]
+    );
+    this.population[this.index].fitness = 1 / (length + 1); //we add one in cas of length =0 to avoid runtime exception
     this.sumOfFitness += 1 / (length + 1);
     if (this.bestLength > length) {
       this.bestEver = this.population[this.index];
@@ -77,28 +84,31 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
       });
     } else {
       this.service.normalizeFitness(this.population, this.sumOfFitness);
-      this.population = this.service.getNewGeneration(this.population, this.mutationRate);
+      this.population = this.service.getNewGeneration(
+        this.population,
+        this.mutationRate
+      );
       this.sumOfFitness = 0;
       this.index = 0;
       this.generationNumber++;
       if (this.generationNumber < 1000)
         window.requestAnimationFrame(() => {
           this.draw();
-        })
+        });
     }
   }
 
   stop() {
     this.started = false;
-    this.initialized=false;
+    this.initialized = false;
     this.index = 0;
   }
 
   drawCities() {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.fillStyle = "#FFFFFF";
+    this.context.fillStyle = '#FFFFFF';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-    this.context.fillStyle = "#1A1A40";
+    this.context.fillStyle = '#1A1A40';
     for (const city of this.cities) {
       let circle = new Path2D();
       circle.arc(city.x, city.y, 20, 0, 2 * Math.PI);
@@ -106,16 +116,23 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  initialise() {
-    this.initialized=true;
+  initialize() {
+    this.initialized = true;
     this.generationNumber = 0;
     this.bestEver = null;
     this.sumOfFitness = 0;
     this.index = 0;
     this.bestLength = Number.MAX_VALUE;
-    this.population = this.service.initializeGeneration(this.populationSize, this.numberOfCities);
-    this.cities = this.service.initializeCities(this.numberOfCities, this.canvas.width, this.canvas.height);
-    this.drawCities()
+    this.population = this.service.initializeGeneration(
+      this.populationSize,
+      this.numberOfCities
+    );
+    this.cities = this.service.initializePoints(
+      this.numberOfCities,
+      this.canvas.width,
+      this.canvas.height
+    );
+    this.drawCities();
   }
 
   drawSolution(solution: Solution, best: boolean) {
@@ -123,10 +140,10 @@ export class GeneticAlgorithmsComponent implements OnInit, AfterViewInit {
     this.context.lineWidth = best ? 5 : 2;
     this.context.beginPath();
     let iterator: Iterator<number> = solution.order.values();
-    let city: City = this.cities[iterator.next().value];
+    let city: Point = this.cities[iterator.next().value];
     this.context.moveTo(city.x, city.y);
     for (let i = 1; i < this.cities.length; i++) {
-      let city: City = this.cities[iterator.next().value];
+      let city: Point = this.cities[iterator.next().value];
       this.context.lineTo(city.x, city.y);
     }
     this.context.stroke();

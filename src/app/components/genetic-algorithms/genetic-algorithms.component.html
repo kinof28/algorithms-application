@@ -1,28 +1,57 @@
-<app-side-bar label="Applied On" [problems]="['Traveling SalesMan','Shakespeare Monkey','knapsack']"
-              (problemChanged)="changeProblem($event)">
+<app-side-bar
+  label="Applied On"
+  [problems]="['Traveling SalesMan', 'Shakespeare Monkey', 'knapsack']"
+  (problemChanged)="changeProblem($event)"
+>
   <h4 class="text-center">
-    {{problem}}
+    {{ problem }}
   </h4>
-  <div class="wrapper" [ngClass]="{'hidden':problem!=='Traveling SalesMan'}">
+  <div class="wrapper" [ngClass]="{ hidden: problem !== 'Traveling SalesMan' }">
     <div class="action-area">
       <div>
         <label for="numberOfCities">Number of Cities :</label>
-        <input id="numberOfCities" type="number" [(ngModel)]="numberOfCities" min="2">
+        <input
+          id="numberOfCities"
+          type="number"
+          [(ngModel)]="numberOfCities"
+          min="2"
+        />
       </div>
-      <button class="btn btn-dark" [disabled]="started" (click)="initialise()">Initialise</button>
+      <button class="btn btn-dark" [disabled]="started" (click)="initialize()">
+        Initialize
+      </button>
       <div>
         <label for="populationSize">Population Size :</label>
-        <input [(ngModel)]="populationSize" id="populationSize" type="number" min="10">
+        <input
+          [(ngModel)]="populationSize"
+          id="populationSize"
+          type="number"
+          min="10"
+        />
       </div>
       <div>
         <label for="mutationRate">Mutation Rate :</label>
-        <input [(ngModel)]="mutationRate" id="mutationRate" type="number" max="1" step="0.001">
+        <input
+          [(ngModel)]="mutationRate"
+          id="mutationRate"
+          type="number"
+          max="1"
+          step="0.001"
+        />
       </div>
-      <button class="btn btn-primary" [disabled]="started||!initialized" (click)="Start()">Start</button>
-      <button class="btn btn-warning" [disabled]="!started" (click)="stop()">Stop</button>
+      <button
+        class="btn btn-primary"
+        [disabled]="started || !initialized"
+        (click)="Start()"
+      >
+        Start
+      </button>
+      <button class="btn btn-warning" [disabled]="!started" (click)="stop()">
+        Stop
+      </button>
     </div>
     <canvas height="300" width="300" #canvas></canvas>
-    <p class="text-center">Generation number : {{generationNumber}}</p>
-    <p class="text-center">best length : {{bestLength}}</p>
+    <p class="text-center">Generation number : {{ generationNumber }}</p>
+    <p class="text-center">best length : {{ bestLength }}</p>
   </div>
 </app-side-bar>
