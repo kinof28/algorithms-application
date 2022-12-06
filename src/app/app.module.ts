@@ -11,6 +11,7 @@ import { NotFoundPageComponent } from './components/not-found-page/not-found-pag
 import { DocumentationComponent } from './components/documentation/documentation.component';
 import { SideBarComponent } from './components/side-bar/side-bar.component';
 import {FormsModule} from "@angular/forms";
+import { KMeansComponent } from './components/k-means/k-means.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {FormsModule} from "@angular/forms";
     ShortestPathComponent,
     NotFoundPageComponent,
     DocumentationComponent,
-    SideBarComponent
+    SideBarComponent,
+    KMeansComponent
   ],
     imports: [
         BrowserModule,

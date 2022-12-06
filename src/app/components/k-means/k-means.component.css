@@ -1,0 +1,22 @@
+canvas {
+  border: 1px solid black;
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.hidden {
+  display: none;
+}
+input {
+  width: 5rem;
+}
+
+.action-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}

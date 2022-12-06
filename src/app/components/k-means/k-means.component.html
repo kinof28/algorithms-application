@@ -1,0 +1,43 @@
+<h4 class="text-center">K-Means Algorithm</h4>
+<div class="wrapper">
+  <div class="action-area">
+    <div>
+      <label for="numberOfEntries">Number of entries: </label>
+      <input
+        id="numberOfEntries"
+        type="number"
+        [(ngModel)]="numberOfEntries"
+        min="1"
+      />
+    </div>
+    <button class="btn btn-dark" [disabled]="started" (click)="initialize()">
+      Initialize
+    </button>
+    <div>
+      <label for="NumberOfClasses">Number of Classes: </label>
+      <input
+        [(ngModel)]="NumberOfClasses"
+        id="NumberOfClasses"
+        type="number"
+        min="1"
+      />
+    </div>
+    <!-- <div>
+      <label for="mutationRate">Mutation Rate :</label>
+      <input [(ngModel)]="mutationRate" id="mutationRate" type="number" max="1" step="0.001">
+    </div> -->
+    <button
+      class="btn btn-primary"
+      [disabled]="started || !initialized"
+      (click)="start()"
+    >
+      Start
+    </button>
+    <button class="btn btn-warning" [disabled]="!started" (click)="stop()">
+      Stop
+    </button>
+  </div>
+  <canvas height="300" width="300" #canvas></canvas>
+  <!-- <p class="text-center">Generation number : {{generationNumber}}</p>
+  <p class="text-center">best length : {{bestLength}}</p> -->
+</div>
