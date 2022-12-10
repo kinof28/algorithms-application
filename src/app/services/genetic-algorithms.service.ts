@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Point } from '../models/point';
 import { Solution } from '../models/solution';
+import { CommonService } from './common.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GeneticAlgorithmsService {
-  constructor() {}
+  constructor(private commonService: CommonService) {}
 
   //this function initialize number of cities in random coordination
   initializePoints(
@@ -44,7 +45,7 @@ export class GeneticAlgorithmsService {
   }
 
   // get a random solution
-  // this function is so costy we need to optimise it later
+  // this function is so costy we need to optimize it later
   private randomizeSolution(numberOfCities: number): Solution {
     let solution: Solution = { order: new Set<number>() };
     while (solution.order.size < numberOfCities) {
@@ -53,20 +54,14 @@ export class GeneticAlgorithmsService {
     return solution;
   }
 
-  //this function calculate distance between two cities and return the distance square
-  //to avoid calculation of square root since we are interested only in relativity between distances
-  calculateDistance(firstPoint: Point, secondPoint: Point): number {
-    let x, y: number;
-    x = Math.abs(firstPoint.x - secondPoint.x);
-    y = Math.abs(firstPoint.y - secondPoint.y);
-    return x * x + y * y;
-  }
-
   calculatePathLength(points: Point[], solution: Solution): number {
     let length: number = 0;
     let order: number[] = [...solution.order];
     for (let i = 0; i < order.length - 1; i++) {
-      length += this.calculateDistance(points[order[i]], points[order[i + 1]]);
+      length += this.commonService.calculateDistance(
+        points[order[i]],
+        points[order[i + 1]]
+      );
     }
     return length;
   }
