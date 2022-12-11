@@ -1,5 +1,5 @@
 # AlgorithmsApplication
-# [View Demo](https://cutt.ly/genetic-algorithm-abdelwahab) 
+# [View Demo](https://abdelwahab-algorithms.netlify.app/) 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.2.
 
