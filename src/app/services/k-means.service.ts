@@ -45,4 +45,45 @@ export class KMeansService {
     }
     return pointMap;
   }
+  recalculateCenters(map: PointMap): boolean {
+    let x: number, y: number;
+    let changed: boolean = false;
+    for (const group of map) {
+      x = y = 0;
+      for (const point of group[1].points) {
+        x += point.x;
+        y += point.y;
+      }
+      x /= group[1].points.length;
+      y /= group[1].points.length;
+      if (group[0].x != x) {
+        changed = true;
+        group[0].x = x;
+      }
+      if (group[0].y != y) {
+        changed == true;
+        group[0].y = y;
+      }
+    }
+    return changed;
+  }
+  reassignCenter(map: PointMap, points: Point[]): PointMap {
+    let closestCenter: Point = points[0];
+    let minimumDistance: number, distance: number;
+    for (const group of map) {
+      group[1].points = [];
+    }
+    for (const point of points) {
+      minimumDistance = Number.MAX_VALUE;
+      for (const group of map) {
+        distance = this.commonService.calculateDistance(group[0], point);
+        if (distance < minimumDistance) {
+          minimumDistance = distance;
+          closestCenter = group[0];
+        }
+      }
+      map.get(closestCenter)?.points.push(point);
+    }
+    return map;
+  }
 }

@@ -15,14 +15,7 @@ export class GeneticAlgorithmsService {
     width: number,
     height: number
   ): Point[] {
-    let points: Point[] = [];
-    for (let i = 0; i < numberOfPoints; i++) {
-      let point: Point = { x: 0, y: 0 };
-      point.x = Math.random() * width;
-      point.y = Math.random() * height;
-      points.push(point);
-    }
-    return points;
+    return this.commonService.initializePoints(numberOfPoints, width, height);
   }
 
   //this function initialize the first generation

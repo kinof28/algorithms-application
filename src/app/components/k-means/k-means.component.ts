@@ -3,6 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Point } from 'src/app/models/point';
 import { PointGroup, PointMap } from 'src/app/models/point-group';
 import { GeneticAlgorithmsService } from 'src/app/services/genetic-algorithms.service';
+import { CommonService } from 'src/app/services/common.service';
 
 @Component({
   selector: 'app-k-means',
@@ -20,9 +21,9 @@ export class KMeansComponent implements OnInit {
   private points: Point[] = [];
   private centers: Point[] = [];
   private groups: PointMap = new Map();
-  // private colors: string[] = [];
+  private id: number = 0;
   constructor(
-    private geneticAlgorithmService: GeneticAlgorithmsService,
+    private commonService: CommonService,
     private service: KMeansService
   ) {}
 
@@ -57,7 +58,7 @@ export class KMeansComponent implements OnInit {
       this.context.fillStyle = group[1].color;
       for (const point of group[1].points) {
         let circle = new Path2D();
-        circle.arc(point.x, point.y, 11, 0, 2 * Math.PI);
+        circle.arc(point.x, point.y, 8, 0, 2 * Math.PI);
         this.context.fill(circle);
       }
     }
@@ -72,7 +73,7 @@ export class KMeansComponent implements OnInit {
   }
   initialize(): void {
     this.initialized = true;
-    this.points = this.geneticAlgorithmService.initializePoints(
+    this.points = this.commonService.initializePoints(
       this.numberOfEntries,
       this.canvas.width,
       this.canvas.height
@@ -80,7 +81,7 @@ export class KMeansComponent implements OnInit {
     this.drawPoints();
   }
   initializeCenters(): void {
-    this.centers = this.geneticAlgorithmService.initializePoints(
+    this.centers = this.commonService.initializePoints(
       this.NumberOfClasses,
       this.canvas.width,
       this.canvas.height
@@ -92,8 +93,25 @@ export class KMeansComponent implements OnInit {
     this.groups = this.service.groupPoints(this.points, this.centers);
     this.drawGroups();
   }
-  start(): void {}
-  stop(): void {}
+  start(): void {
+    this.started = true;
+    this.id = window.setInterval(() => {
+      this.draw();
+    }, 500);
+  }
+  draw(): void {
+    console.log('drawing...');
+    if (!this.started) return;
+    this.drawGroups();
+    if (this.service.recalculateCenters(this.groups))
+      this.groups = this.service.reassignCenter(this.groups, this.points);
+    else this.stop();
+  }
+  stop(): void {
+    this.started = false;
+    this.initialized = false;
+    window.clearInterval(this.id);
+  }
   numberOfClassesChanges(): void {
     this.NumberOfClasses =
       this.NumberOfClasses > this.numberOfEntries
