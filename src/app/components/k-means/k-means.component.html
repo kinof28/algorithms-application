@@ -32,7 +32,7 @@
     </button>
     <button
       class="btn btn-primary"
-      [disabled]="started || !initialized"
+      [disabled]="started || !initialized || !randomized"
       (click)="start()"
     >
       Start
@@ -42,4 +42,5 @@
     </button>
   </div>
   <canvas height="300" width="300" #canvas></canvas>
+  <h6 *ngIf="index > 0" class="text-center">iteration: {{ index }}</h6>
 </div>

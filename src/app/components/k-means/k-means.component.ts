@@ -1,8 +1,7 @@
 import { KMeansService } from './../../services/k-means.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Point } from 'src/app/models/point';
-import { PointGroup, PointMap } from 'src/app/models/point-group';
-import { GeneticAlgorithmsService } from 'src/app/services/genetic-algorithms.service';
+import { PointMap } from 'src/app/models/point-group';
 import { CommonService } from 'src/app/services/common.service';
 
 @Component({
@@ -15,6 +14,8 @@ export class KMeansComponent implements OnInit {
   NumberOfClasses: number = 2;
   started: boolean = false;
   initialized: boolean = false;
+  randomized: boolean = false;
+  index: number = 0;
   @ViewChild('canvas', { static: false }) canvasRef!: ElementRef;
   canvas!: HTMLCanvasElement;
   context!: CanvasRenderingContext2D;
@@ -73,6 +74,8 @@ export class KMeansComponent implements OnInit {
   }
   initialize(): void {
     this.initialized = true;
+    this.randomized = false;
+    this.index = 0;
     this.points = this.commonService.initializePoints(
       this.numberOfEntries,
       this.canvas.width,
@@ -89,6 +92,7 @@ export class KMeansComponent implements OnInit {
     this.drawCenters();
   }
   randomizeCenters(): void {
+    this.randomized = true;
     this.initializeCenters();
     this.groups = this.service.groupPoints(this.points, this.centers);
     this.drawGroups();
@@ -97,6 +101,7 @@ export class KMeansComponent implements OnInit {
     this.started = true;
     this.id = window.setInterval(() => {
       this.draw();
+      this.index++;
     }, 500);
   }
   draw(): void {
@@ -110,6 +115,7 @@ export class KMeansComponent implements OnInit {
   stop(): void {
     this.started = false;
     this.initialized = false;
+    this.randomized = false;
     window.clearInterval(this.id);
   }
   numberOfClassesChanges(): void {
